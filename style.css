@@ -1,0 +1,203 @@
+:root { --primary-color: #ff6600; --bg-color: #f4f7f6; --text-color: #333; }
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; background-color: var(--bg-color); color: var(--text-color); }
+header { background-color: #222; padding: 15px 40px; display: flex; justify-content: space-between; align-items: center; color: white; border-bottom: 3px solid var(--primary-color); }
+.logo-container { display: flex; align-items: center; gap: 15px; }
+.logo-text { font-size: 24px; font-weight: bold; color: white(--primary-color); }
+/* Logo transparent ဖြစ်စေရန် */
+.logo-img { width: 60px; height: 60px; object-fit: contain; background: transparent; }
+.nav-links { display: flex; align-items: center; gap: 15px; }
+.nav-links input { padding: 10px 15px; border-radius: 20px; border: none; outline: none; width: 250px; }
+.login-btn, #cartBtn, .checkout-btn { background-color: var(--primary-color); color: white; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+.login-btn:hover, #cartBtn:hover, .checkout-btn:hover { opacity: 0.8; }
+.sub-nav { background-color: #fff; padding: 0 40px; display: flex; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); min-height: 15px; }
+.dropdown { position: relative; display: inline-block; }
+.dropbtn { background-color: transparent; border: none; padding: 10px 0; font-size: 14px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 10px; }
+.dropdown-content { display: none; position: absolute; background-color: white; min-width: 250px; box-shadow: 0 8px 16px rgba(0,0,0,0.1); z-index: 100; border-radius: 0 0 8px 8px; }
+.dropdown:hover .dropdown-content { display: block; }
+.dropdown-item { padding: 12px 20px; display: flex; justify-content: space-between; cursor: pointer; border-bottom: 1px solid #f0f0f0; position: relative; }
+.dropdown-item:hover { background-color: #f9f9f9; color: var(--primary-color); }
+.sub-menu { display: none; position: absolute; left: 100%; top: 0; background: white; min-width: 200px; box-shadow: 0 8px 16px rgba(0,0,0,0.1); border-radius: 0 8px 8px 8px; }
+.dropdown-item:hover .sub-menu { display: block; }
+.sub-menu a { display: block; padding: 12px 20px; text-decoration: none; color: #333; border-bottom: 1px solid #f0f0f0; }
+.sub-menu a:hover { background-color: #f9f9f9; color: var(--primary-color); }
+.banner-container { flex-grow: 1; padding-left: 30px; color: var(--primary-color); font-weight: bold; font-size: 16px; display: flex; align-items: center; }
+
+/* Product Grid & Cards */
+.section-title { text-align: center; margin: 40px 0 20px; font-size: 28px; }
+.product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; max-width: 1200px; margin: 0 auto; padding: 20px; }
+.product-card { background: white; border: 1px solid #eee; border-radius: 12px; padding: 15px; text-align: center; transition: 0.3s; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.03); display: flex; flex-direction: column; justify-content: space-between; }
+.product-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); border-color: var(--primary-color); }
+.product-image { width: 100%; height: 180px; object-fit: contain; margin-bottom: 15px; }
+.product-info h3 { margin: 0 0 5px; font-size: 16px; color: #222; }
+.price { font-size: 18px; color: var(--primary-color); font-weight: bold; margin: 10px 0; }
+.add-to-cart-btn { background: #333; color: white; border: none; padding: 10px; width: 100%; border-radius: 6px; cursor: pointer; transition: 0.3s; margin-top: 10px; }
+.add-to-cart-btn:hover { background: var(--primary-color); }
+
+/* Cart Sidebar */
+.cart-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; opacity: 0; visibility: hidden; transition: 0.3s; }
+.cart-overlay.show { opacity: 1; visibility: visible; }
+.cart-sidebar { position: fixed; top: 0; right: -400px; width: 350px; height: 100%; background: white; box-shadow: -2px 0 10px rgba(0,0,0,0.1); z-index: 1001; transition: right 0.3s ease; display: flex; flex-direction: column; }
+.cart-sidebar.show { right: 0; }
+.cart-header { background: var(--primary-color); color: white; padding: 20px; display: flex; justify-content: space-between; align-items: center; }
+.cart-items { padding: 20px; flex-grow: 1; overflow-y: auto; }
+.cart-footer { padding: 20px; background: #f9f9f9; border-top: 1px solid #ddd; }
+
+/* Modals */
+.modal-overlay { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); align-items: center; justify-content: center; }
+.modal-content { background: white; padding: 30px; border-radius: 12px; width: 90%; max-width: 500px; position: relative; }
+.auth-input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
+
+/* Admin Table */
+.admin-table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+.admin-table th, .admin-table td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #f0f0f0; }
+.admin-table th { background-color: #f8f9fa; font-size: 13px; text-transform: uppercase; color: #555; }
+.admin-tabs { display: flex; gap: 15px; margin-bottom: 20px; border-bottom: 2px solid #ddd; padding-bottom: 10px; }
+.tab-btn { background: none; border: none; padding: 10px 20px; font-size: 16px; cursor: pointer; color: #666; font-weight: bold; }
+.tab-btn.active { color: var(--primary-color); border-bottom: 3px solid var(--primary-color); }
+
+/* Slider Dots */
+#frontHeroDots { 
+    position: absolute; 
+    bottom: 20px; 
+    width: 100%; 
+    text-align: center; 
+    z-index: 10; 
+}
+.dot { 
+    display: inline-block; 
+    width: 12px; 
+    height: 12px; 
+    margin: 0 6px; 
+    background-color: rgba(255, 255, 255, 0.5); 
+    border-radius: 50%; 
+    cursor: pointer; 
+    transition: all 0.3s ease; 
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+.dot.active { 
+    background-color: var(--primary-color); 
+    transform: scale(1.3); 
+    background-color: #ff6600; /* Primary orange */
+}
+@media screen and (max-width: 768px) {
+    
+    /* ၁။ Header အပိုင်း (Search, Login, Cart) ကို သေချာပေါက် နေရာချရန် (Grid စနစ်ကို သုံးထားပါသည်) */
+    .nav-links {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important; /* အကွက် ၂ ကွက် တိတိ ခွဲပါမည် */
+        gap: 10px !important; /* ခလုတ်များကြား အကွာအဝေး */
+        width: 100% !important;
+    }
+    .nav-links input {
+        grid-column: span 2 !important; /* Search Box ကို ၂ ကွက်စာ အပြည့်ယူစေပါမည် */
+        width: 100% !important;
+        font-size: 16px !important; /* Zoom မဆွဲစေရန် */
+    }
+    .login-btn, #cartBtn {
+        width: 100% !important; /* ခွဲထားတဲ့ Grid အကွက်ထဲမှာ အပြည့်ယူပါမည် */
+        margin: 0 !important;
+        box-sizing: border-box;
+    }
+
+    /* ၂။ Hero Banner ပုံများ အံဝင်ခွင်ကျဖြစ်စေရန် */
+    /* Banner မှာ စာတွေပါနေလို့ ပုံကို Crop မလုပ်ဘဲ အပြည့်ပေါ်စေရန် contain သုံးပြီး အမြင့်ကန့်သတ်လိုက်ပါသည် */
+    .banner-container img, 
+    .banner-img,
+    .carousel-item img { 
+        width: 100% !important;
+        max-height: 220px !important; /* ဖုန်းမှာ ပုံအရမ်းမကြီးစေရန် အမြင့်ကို ကန့်သတ်ထားသည် */
+        object-fit: contain !important; 
+        display: block;
+        margin: 0 auto;
+    }
+
+    /* ၃။ Product Detail View (Modal) အဆင်ပြေစေရန် */
+    .modal-content {
+        width: 90% !important;
+        max-height: 85vh !important; /* မျက်နှာပြင်အမြင့်ရဲ့ 85% သာ အများဆုံးယူရန် */
+        overflow-y: auto !important; /* စာရှည်ရင် အောက်ကို Scroll ဆွဲလို့ရအောင် */
+        padding: 15px !important;
+        margin: 5% auto !important; /* အပေါ်အောက် နေရာလွတ်လေး ကျန်စေရန် */
+        box-sizing: border-box;
+    }
+    
+    /* Modal ထဲက Product ပုံကြီး အရမ်းကြီးမနေစေရန် */
+    .modal-content img {
+        width: 100% !important;
+        max-height: 250px !important; /* ပုံအမြင့်ကို 250px ထက် ပိုမကြီးခွင့်မပေးတော့ပါ */
+        object-fit: contain !important; /* ပုံမလိမ်သွားစေရန် */
+        display: block;
+        margin: 0 auto 15px auto !important;
+    }
+
+    /* Thumbnail ပုံအသေးလေးတွေ (Screenshot ထဲက ပုံသေးလေးတွေ) အတွက် */
+    .modal-content img[style*="width: 50px"], /* Inline style ပါရင် မိစေရန် */
+    .thumbnail-img {
+        max-height: 60px !important;
+        width: 60px !important;
+        object-fit: cover !important;
+        margin-right: 5px !important;
+        display: inline-block !important;
+    }
+}
+@media screen and (max-width: 768px) {
+    /* Header & Navigation */
+    header { 
+        flex-direction: column; 
+        padding: 15px; 
+        gap: 15px; 
+    }
+    /* Sub Navigation */
+    .sub-nav { 
+        padding: 0 15px; 
+        overflow-x: auto; /* ဘေးတိုက် ပွတ်ဆွဲလို့ရရန် */
+        white-space: nowrap; 
+    }
+    .dropdown { position: static; }
+    /* Product Grid */
+    .product-grid { 
+        /* ဖုန်းမှာ တစ်တန်းကို အနည်းဆုံး ၂ ခု (သို့) ၁ ခု ပေါ်စေရန် */
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); 
+        gap: 15px; 
+        padding: 15px; 
+    }
+    .product-image { 
+        height: 150px; /* ပုံဆိုဒ် အနည်းငယ်လျှော့ရန် */
+    }
+    
+    /* Cart Sidebar */
+    .cart-sidebar { 
+        width: 100%; /* ဖုန်းမှာဆိုရင် Sidebar က screen အပြည့်ဖြစ်သွားအောင် */
+        right: -100%; 
+    }
+   
+    /* Admin Table */
+    .admin-table-container {
+        /* Table တွေက ဖုန်းမှာမဆန့်တတ်လို့ Horizontal Scroll လုပ်နိုင်ရန် wrapper လိုအပ်ပါသည် */
+        overflow-x: auto;
+        display: block;
+        width: 100%;
+    }
+    .admin-table {
+        min-width: 600px; /* Table content တွေ ပိန်လိမ်မသွားစေရန် */
+    }
+    
+    /* Section Titles & Padding */
+    .section-title { 
+        font-size: 24px; 
+        margin: 30px 0 15px; 
+    }
+}
+/* Very Small Mobile Screens (e.g. iPhone SE) */
+@media screen and (max-width: 400px) {
+    .product-grid { 
+        grid-template-columns: 1fr; /* မျက်နှာပြင် အရမ်းသေးရင် တစ်တန်းကို တစ်ခုပဲပြရန် */
+    }
+}
+/* 3. Hero Banner အံဝင်ခွင်ကျဖြစ်စေရန် */
+    .banner-container { 
+        padding: 20px 15px; 
+        text-align: center; /* ဖုန်းမှာ စာတွေကို အလယ်မှာထားတာ ပိုလှလို့ပါ */
+        width: 100%;
+        box-sizing: border-box;
+    }
