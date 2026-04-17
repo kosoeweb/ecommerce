@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="style.css?v=1.1">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .full-width { grid-column: span 2; }
+        textarea { width: 100%; height: 100px; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-family: inherit; }
+    </style>
+</head>
+<body style="background-color: #f4f7f6;">
+
+    <header>
+        <div class="logo-container">
+            <img src="https://zdifzvpjmmmsfitjsraw.supabase.co/storage/v1/object/sign/Logo/UT%20Logo.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV84MjVmNmZkNy1mZTM3LTQzNWItOWFhMi1jZGQ4ZjY5NWM0NGYiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJMb2dvL1VUIExvZ28ucG5nIiwiaWF0IjoxNzc2MTYxNTMyLCJleHAiOjIwOTE1MjE1MzJ9.m1SFbDusZJ0EIqrDjog_Pok2FMzYGtVhV0hmrogL-3Q
+" alt="Logo" class="logo-img" style="background:transparent;">
+            <div class="logo-text" style="color: white;">Admin Dashboard</div>
+        </div>
+        <div class="nav-links">
+            <a href="index.html" style="color: white; text-decoration: none; padding: 10px 20px; background: #333; border-radius: 20px;">View Shop ↗</a>
+        </div>
+    </header>
+
+    <div class="admin-container" style="max-width: 1400px; margin: 30px auto; padding: 0 20px;">
+        
+        <div class="admin-tabs">
+            <button class="tab-btn active" onclick="openAdminTab('orders', this)">📦 Orders</button>
+            <button class="tab-btn" onclick="openAdminTab('products', this)">📋 Inventory (Sync)</button>
+            <button class="tab-btn" onclick="openAdminTab('homepage', this)">🎨 Web Settings</button>
+        </div>
+
+        <div id="orders" class="tab-content" style="display: block;">
+            <h2>Recent Orders</h2>
+            <table class="admin-table">
+                <thead><tr><th>Date</th><th>Order ID</th><th>Customer Info</th><th>Total</th><th>Status</th><th>Action</th></tr></thead>
+                <tbody id="orderTableBody"><tr><td colspan="6" style="text-align:center;">Loading orders...</td></tr></tbody>
+            </table>
+        </div>
+
+        <div id="products" class="tab-content" style="display: none;">
+            <h2>Inventory Management</h2>
+            <div class="settings-card" style="margin-bottom: 20px;">
+                <button onclick="syncWithWMS()" class="checkout-btn" style="background: #007bff; width: auto; margin-right: 15px;">🔄 Sync Data from WMS</button>
+            </div>
+
+            <div style="overflow-x: auto;">
+                <table class="admin-table">
+                    <thead><tr><th>Code</th><th>Photo</th><th>Name</th><th>Category</th><th>Price ($)</th><th>Stock</th><th>Actions</th></tr></thead>
+                    <tbody id="inventoryTableBody"><tr><td colspan="8" style="text-align:center;">Loading inventory...</td></tr></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="homepage" class="tab-content" style="display: none;">
+            <h2>Web Settings & Footer Customization</h2>
+            
+            <div class="settings-card">
+                <h4>Upload Hero Banners (Max 5)</h4>
+                <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 15px;">
+                    <input type="file" id="heroImageUpload" accept="image/*" class="auth-input" style="margin: 0; padding: 10px;">
+                    <button onclick="uploadHeroImage()" class="checkout-btn" style="width: auto; margin: 0;">Upload Banner</button>
+                </div>
+                <div id="adminHeroGrid" style="display: flex; gap: 15px; margin-bottom: 30px; padding:15px; background:#f9f9f9; border-radius:8px; overflow-x:auto;"></div>
+
+                <label><strong>Moving Banner Text:</strong></label>
+                <input type="text" id="setBannerText" class="auth-input" style="margin-top: 10px; margin-bottom: 30px;">
+                
+                <h4 style="border-top: 1px solid #eee; padding-top: 20px;">Footer Content & Logo</h4>
+                <div style="display: flex; gap: 15px; align-items: center; margin-bottom: 20px;">
+                    <img id="footerLogoPreview" src="" alt="Preview" style="height: 100px; width: 140px; object-fit: contain; background: transparent; border-radius: 4px; padding: 5px; border: 1px dashed #ccc;">
+                    <input type="file" id="footerLogoUpload" accept="image/*" class="auth-input" style="margin:0; padding: 10px;">
+		    <button onclick="uploadFooterLogo()" class="checkout-btn" style="width: auto; margin: 0;">Upload Logo</button>
+		</div>
+                <div class="form-grid">
+                    <div class="full-width"><label>Footer Title</label><input type="text" id="setFooterTitle" class="auth-input"></div>
+                    <div class="full-width"><label>Footer Description</label><textarea id="setFooterDesc"></textarea></div>
+                </div>
+
+                <h4 style="border-top: 1px solid #eee; padding-top: 20px;">Contact Information</h4>
+                <div class="form-grid">
+                    <div><label>Address</label><input type="text" id="setFooterAddress" class="auth-input"></div>
+                    <div><label>Phone</label><input type="text" id="setFooterPhone" class="auth-input"></div>
+                    <div class="full-width"><label>Email</label><input type="text" id="setFooterEmail" class="auth-input"></div>
+                </div>
+
+                <h4 style="border-top: 1px solid #eee; padding-top: 20px;">Social Links</h4>
+                <div class="form-grid">
+                    <div><label>Facebook Link</label><input type="text" id="setLinkFb" class="auth-input"></div>
+                    <div><label>YouTube Link</label><input type="text" id="setLinkYt" class="auth-input"></div>
+                    <div class="full-width"><label>Website/Other Link</label><input type="text" id="setLinkWeb" class="auth-input"></div>
+                </div>
+                
+                <button onclick="saveSettings()" class="checkout-btn" style="margin-top: 20px;">Save All Settings</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="editProductModal" class="modal-overlay" style="display: none; align-items: center; justify-content: center;">
+        <div class="modal-content" style="max-width: 600px; padding: 30px;">
+            <span class="close-btn" onclick="closeEditModal()" style="float: right; font-size:24px; cursor:pointer;">&times;</span>
+            <h2 style="margin-top: 0;">Edit Custom Info</h2>
+            <p style="color:#666; font-size: 13px;">Name and WMS details are auto-synced. You can set a custom Price, Description, and Photos here.</p>
+            <input type="hidden" id="editProductId">
+            <div class="form-grid">
+                <div><label>Item Code</label><input type="text" id="editItemCode" class="auth-input" readonly style="background: #eee;"></div>
+                <div><label>Price ($)</label><input type="number" id="editPrice" class="auth-input"></div>
+                <div class="full-width"><label>Custom Description</label><textarea id="editDescription"></textarea></div>
+                <div class="full-width">
+                    <label>Extra Photos (Max 5)</label>
+                    <input type="file" id="editImages" accept="image/*" multiple class="auth-input">
+                </div>
+            </div>
+            <button onclick="saveProductDetails()" class="checkout-btn" style="margin-top: 20px; width: 100%;">Save Changes</button>
+        </div>
+    </div>
+
+    <div id="orderDetailModal" class="modal-overlay" style="display: none; align-items: center; justify-content: center;">
+        <div class="modal-content" style="max-width: 700px; padding: 30px;">
+            <span class="close-btn" onclick="document.getElementById('orderDetailModal').style.display='none'" style="float: right; font-size:24px; cursor:pointer;">&times;</span>
+            <h2 style="margin-top: 0;">Order Details</h2>
+            <div id="orderInfo" style="margin-bottom: 20px; padding: 15px; background: #f9f9f9; border-radius: 6px; line-height:1.6;"></div>
+            
+            <table class="admin-table" style="margin-bottom: 20px;">
+                <thead><tr><th>Item</th><th>Price</th><th>Qty</th><th>Subtotal</th></tr></thead>
+                <tbody id="orderItemsBody"></tbody>
+            </table>
+            
+            <h3 style="text-align: right; color: var(--primary-color);">Total: $<span id="orderTotalDisplay">0</span></h3>
+            
+            <label style="font-weight:bold;">Update Status:</label>
+            <select id="orderStatusSelect" class="auth-input" style="margin-bottom: 20px;">
+                <option value="Pending">Pending</option>
+                <option value="Processing">Processing</option>
+                <option value="Shipped">Shipped</option>
+                <option value="Delivered">Delivered</option>
+                <option value="Cancelled">Cancelled</option>
+            </select>
+            <input type="hidden" id="currentOrderId">
+            <button class="checkout-btn" onclick="saveOrderStatus()" style="width: 100%;">Save Order Status</button>
+        </div>
+    </div>
+
+    <script src="app.js?v=1.1"></script> 
+<script src="admin.js?v=1.1"></script>
+</body>
+</html>

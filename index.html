@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universal Tractor</title>
+    <link rel="stylesheet" href="style.css?v=1.1">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        .detail-content { max-width: 1000px; display: flex; flex-direction: row; padding: 0; overflow: hidden; }
+        .detail-gallery { width: 50%; padding: 30px; background: #f4f7f6; }
+        .detail-info { width: 50%; padding: 30px; }
+        .wms-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; background: #f0f0f0; padding: 15px; border-radius: 8px; font-size: 14px; margin-bottom: 20px; }
+        @media (max-width: 768px) { .detail-content { flex-direction: column; } .detail-gallery, .detail-info { width: 100%; } }
+    </style>
+</head>
+<body>
+<div id="globalLoader" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #f4f7f6; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+        <div style="border: 4px solid #ddd; border-top: 4px solid #ff6600; border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite;"></div>
+        <h3 style="color: #ff6600; margin-top: 20px; font-family: sans-serif;">Loading Shop...</h3>
+        <style>@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }</style>
+    </div>
+    <header>
+        <div class="logo-container">
+            <img src="https://zdifzvpjmmmsfitjsraw.supabase.co/storage/v1/object/sign/Logo/UT%20Logo.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV84MjVmNmZkNy1mZTM3LTQzNWItOWFhMi1jZGQ4ZjY5NWM0NGYiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJMb2dvL1VUIExvZ28ucG5nIiwiaWF0IjoxNzc2MTYxNTMyLCJleHAiOjIwOTE1MjE1MzJ9.m1SFbDusZJ0EIqrDjog_Pok2FMzYGtVhV0hmrogL-3Q" alt="Logo" class="logo-img">
+            <div class="logo-text">Universal Tractor</div>
+        </div>
+        <div class="nav-links">
+            <input type="text" id="searchInput" placeholder="Search products..." onkeyup="searchProducts(this.value)">
+            <span id="userEmailDisplay" style="color: var(--primary-color); font-weight: bold; margin-right: 15px; font-size: 14px;"></span>
+            <button id="authBtn" onclick="openAuthModal()" class="login-btn">Login</button>
+            <button id="cartBtn" onclick="toggleCart()">Cart (<span id="cartCount">0</span>)</button>
+        </div>
+    </header>
+
+    <nav class="sub-nav">
+        <div class="dropdown">
+            <button class="dropbtn">☰ Categories</button>
+            <div class="dropdown-content" id="categoryMenu">Loading categories...</div>
+        </div>
+        <div class="banner-container"><marquee id="marqueeText" behavior="scroll" direction="left" scrollamount="6">Welcome to Universal Tractor!</marquee></div>
+    </nav>
+
+    <section class="hero-slider" style="position: relative; overflow: hidden; height: 450px; background: #eee;">
+        <div id="frontSliderWrapper" style="display: flex; transition: transform 0.5s ease-in-out; height: 100%; width: 100%;"></div>
+        <div id="frontHeroDots" style="position: absolute; bottom: 20px; width: 100%; text-align: center; z-index: 10;"></div>
+    </section>
+
+    <main id="productSection">
+        <h2 class="section-title">✨ Featured Products</h2>
+        <div id="productGrid" class="product-grid"><p style="text-align:center; width:100%;">Loading products...</p></div>
+    </main>
+
+    <footer style="background-color: #1a1a1a; color: #e0e0e0; padding: 60px 20px; font-family: sans-serif; border-top: 4px solid #ff6600;">
+        <div style="max-width: 1200px; margin: auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 40px;">
+            
+            <div style="display: flex; flex-direction: column; gap: 15px;">
+                <div style="background: white; padding: 10px; border-radius: 8px; display: inline-block; width: fit-content;">
+                    <img id="footerLogoDisplay" style="width: 150px; max-height: 80px; display: none; object-fit: contain;">
+                </div>
+                <h2 id="footerTitleDisplay" style="color: #ff6600; margin: 0; font-size: 24px;">Universal Tractor</h2>
+                <p id="footerDescDisplay" style="line-height: 1.6; margin: 0; color: #aaa;">Your trusted partner.</p>
+            </div>
+
+            <div>
+                <h3 style="color: #fff; margin-top: 0; margin-bottom: 20px; font-size: 18px; text-transform: uppercase; letter-spacing: 1px;">Contact Us</h3>
+                <div style="display: flex; flex-direction: column; gap: 15px;">
+                    <div style="display: flex; align-items: flex-start; gap: 10px;">
+                        <span style="font-size: 18px;">📍</span>
+                        <span id="footerAddressDisplay" style="color: #aaa; line-height: 1.5;">Loading...</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <span style="font-size: 18px;">📞</span>
+                        <span id="footerPhoneDisplay" style="color: #aaa;">Loading...</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <span style="font-size: 18px;">✉️</span>
+                        <span id="footerEmailDisplay" style="color: #aaa;">Loading...</span>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <h3 style="color: #fff; margin-top: 0; margin-bottom: 20px; font-size: 18px; text-transform: uppercase; letter-spacing: 1px;">Follow Us</h3>
+                <div style="display: flex; flex-direction: column; gap: 15px;">
+                    <a id="linkFbDisplay" href="#" target="_blank" style="color: #aaa; text-decoration: none; display: none; align-items: center; gap: 10px;">
+                        <img src="https://zdifzvpjmmmsfitjsraw.supabase.co/storage/v1/object/sign/Logo/fb.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV84MjVmNmZkNy1mZTM3LTQzNWItOWFhMi1jZGQ4ZjY5NWM0NGYiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJMb2dvL2ZiLnBuZyIsImlhdCI6MTc3NjM2Mzc2MSwiZXhwIjoyMDkxNzIzNzYxfQ.9X_8HcBDjWrVBLJAOCOZWwuMaXiNipj_WjEQ5zTot7c" style="width: 28px; background: transparent;" alt="Facebook"> Facebook
+                    </a>
+                    <a id="linkYtDisplay" href="#" target="_blank" style="color: #aaa; text-decoration: none; display: none; align-items: center; gap: 10px;">
+                        <img src="https://zdifzvpjmmmsfitjsraw.supabase.co/storage/v1/object/sign/Logo/Youtube.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV84MjVmNmZkNy1mZTM3LTQzNWItOWFhMi1jZGQ4ZjY5NWM0NGYiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJMb2dvL1lvdXR1YmUucG5nIiwiaWF0IjoxNzc2MzYzNTY4LCJleHAiOjIwOTE3MjM1Njh9.U6Cyhny8567GLgcpzki9pJwgk2rN9mQjI1pC813YkWA" style="width: 28px; background: transparent;" alt="YouTube"> YouTube
+                    </a>
+                    <a id="linkWebDisplay" href="#" target="_blank" style="color: #aaa; text-decoration: none; display: none; align-items: center; gap: 10px;">
+                        <img src="https://zdifzvpjmmmsfitjsraw.supabase.co/storage/v1/object/sign/Logo/web1.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV84MjVmNmZkNy1mZTM3LTQzNWItOWFhMi1jZGQ4ZjY5NWM0NGYiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJMb2dvL3dlYjEucG5nIiwiaWF0IjoxNzc2MzY3NDkyLCJleHAiOjIwOTE3Mjc0OTJ9.G6Pj1mSCWDNf_lfb15VPkpplheMhaSqX1YXwZtlzhwg" style="width: 28px; background: transparent;" alt="Website"> Website
+                    </a>
+                </div>
+            </div>
+            
+        </div>
+    </footer>
+
+    <div id="productDetailModal" class="modal-overlay" onclick="closeProductDetail(event)">
+        <div class="detail-content" onclick="event.stopPropagation()">
+            <span class="close-btn" onclick="closeProductDetail()" style="position: absolute; right: 20px; top: 15px; font-size: 30px; cursor: pointer; z-index: 10;">&times;</span>
+            <div class="detail-gallery">
+                <img id="detailMainImg" style="width: 100%; height: 350px; object-fit: contain; background: white; border-radius: 8px;">
+                <div id="detailThumbs" style="display: flex; gap: 10px; margin-top: 15px; overflow-x: auto;"></div>
+            </div>
+            <div class="detail-info" style="background: white;">
+                <h1 id="detailName" style="margin-top:0;">Name</h1>
+                <p style="color: #666; margin: 5px 0;">Code: <span id="detailCode"></span></p>
+                <div style="font-size: 28px; color: #ff6600; font-weight: bold; margin: 15px 0;" id="detailPrice">$0</div>
+                <p style="color: green; font-weight: bold; margin-bottom: 20px;">Available Stock: <span id="detailStock">0</span></p>
+                <div id="detailWmsInfo" class="wms-grid"></div>
+                <button id="detailAddToCartBtn" class="checkout-btn" style="width: 100%; padding: 15px; font-size: 18px;">Add to Cart</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="cartOverlay" class="cart-overlay" onclick="toggleCart()"></div>
+    <div id="cartSidebar" class="cart-sidebar">
+        <div style="background: #ff6600; color: white; padding: 20px; display: flex; justify-content: space-between; align-items: center;">
+            <h2 style="margin:0;">🛒 Cart</h2>
+            <button onclick="toggleCart()" style="background: transparent; border: none; color: white; font-size: 24px; cursor: pointer;">✖</button>
+        </div>
+        <div id="cartItems" style="padding: 20px; flex-grow: 1; overflow-y: auto;"></div>
+        <div style="padding: 20px; background: #f9f9f9; border-top: 1px solid #ddd;">
+            <h3 style="margin-top:0;">Total: $<span id="cartTotal">0.00</span></h3>
+            <button class="checkout-btn" onclick="openCheckoutModal()" style="width: 100%;">Checkout</button>
+        </div>
+    </div>
+
+    <div id="checkoutModal" class="modal-overlay" onclick="closeCheckoutModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <span class="close-btn" onclick="closeCheckoutModal()" style="float: right; cursor: pointer; font-size: 24px;">&times;</span>
+            <h2>Delivery Details</h2>
+            <input type="text" id="chkName" placeholder="Full Name" class="auth-input">
+            <input type="text" id="chkPhone" placeholder="Phone Number" class="auth-input">
+            <textarea id="chkAddress" placeholder="Full Address" class="auth-input" style="height: 80px;"></textarea>
+            <button class="checkout-btn" onclick="submitOrder()" style="width: 100%;">Place Order</button>
+        </div>
+    </div>
+
+    <div id="authModal" class="modal-overlay" onclick="closeAuthModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <span class="close-btn" onclick="closeAuthModal()" style="float: right; cursor: pointer; font-size: 24px;">&times;</span>
+            <h2 id="authTitle">Login</h2>
+            <div id="signupFields" style="display: none;">
+                <input type="text" id="authName" placeholder="Full Name" class="auth-input">
+                <input type="text" id="authPhone" placeholder="Phone Number" class="auth-input">
+                <textarea id="authAddress" placeholder="Address" class="auth-input" style="height: 60px;"></textarea>
+            </div>
+            <input type="email" id="authEmail" placeholder="Email" class="auth-input">
+            <input type="password" id="authPassword" placeholder="Password" class="auth-input">
+            <button id="authSubmitBtn" class="checkout-btn" onclick="handleAuth()" style="width: 100%;">Login</button>
+            <p style="text-align: center; margin-top: 15px;"><a href="#" onclick="toggleAuthMode()" style="color: #ff6600;">Switch to Sign Up / Login</a></p>
+        </div>
+    </div>
+
+    <script src="app.js?v=1.1"></script>
+</body>
+</html>
