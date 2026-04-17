@@ -92,7 +92,7 @@ header { background-color: #222; padding: 15px 40px; display: flex; justify-cont
     }
     .login-btn, #cartBtn, .checkout-btn {
         width: 48% !important;
-        flex: 0 0 45% !important; /* ခလုတ်များကို ၄၈ ရာခိုင်နှုန်းစီဖြင့် တစ်ဝက်စီ ယူစေမည် */
+        flex: 0 0 48% !important; /* ခလုတ်များကို ၄၈ ရာခိုင်နှုန်းစီဖြင့် တစ်ဝက်စီ ယူစေမည် */
         box-sizing: border-box !important;
         margin: 0 !important;
         padding: 12px 0 !important;
@@ -125,7 +125,7 @@ header { background-color: #222; padding: 15px 40px; display: flex; justify-cont
     .carousel-item img,
     img[alt*="banner"] { 
         width: 100% !important;
-        aspect-ratio: 16 / 3 !important; /* ဖုန်းနဲ့ ကိုက်ညီသော အချိုးအစား */
+        aspect-ratio: 16 / 9 !important; /* ဖုန်းနဲ့ ကိုက်ညီသော အချိုးအစား */
         height: auto !important;
         object-fit: cover !important; /* မျက်နှာပြင်အပြည့် လှလှပပပေါ်စေရန် */
         display: block !important;
@@ -133,7 +133,7 @@ header { background-color: #222; padding: 15px 40px; display: flex; justify-cont
 
     /* ၄။ Modal (Product Detail) ပုံကြီး အရမ်းမရှည်စေရန် ဖြတ်ချခြင်း */
     .modal-content {
-        width: 80% !important;
+        width: 90% !important;
         max-height: 85vh !important; 
         overflow-y: auto !important; 
         padding: 20px 15px !important;
@@ -141,7 +141,7 @@ header { background-color: #222; padding: 15px 40px; display: flex; justify-cont
         box-sizing: border-box !important;
     }
     .modal-content img {
-        width: 80% !important;
+        width: 90% !important;
         max-height: 250px !important; /* ပုံအမြင့်ကို 250px ဖြင့် ကန့်သတ်လိုက်ပါသည် */
         object-fit: contain !important; /* ပုံမလိမ်သွားစေဘဲ အပြည့်ပေါ်စေရန် */
         display: block !important;
