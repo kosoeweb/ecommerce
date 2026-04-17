@@ -91,8 +91,8 @@ header { background-color: #222; padding: 15px 40px; display: flex; justify-cont
         padding: 12px 15px !important;
     }
     .login-btn, #cartBtn, .checkout-btn {
-        width: 48% !important;
-        flex: 0 0 48% !important; /* ခလုတ်များကို ၄၈ ရာခိုင်နှုန်းစီဖြင့် တစ်ဝက်စီ ယူစေမည် */
+        width: 45% !important;
+        flex: 0 0 45% !important; /* ခလုတ်များကို ၄၈ ရာခိုင်နှုန်းစီဖြင့် တစ်ဝက်စီ ယူစေမည် */
         box-sizing: border-box !important;
         margin: 0 !important;
         padding: 12px 0 !important;
